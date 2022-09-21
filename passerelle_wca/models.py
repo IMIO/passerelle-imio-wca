@@ -39,6 +39,7 @@ class ConnectorWCA(BaseResource):
     @endpoint(
         name="user",
         perm="can_access",
+        methods=["post"],
         description="Create user",
         long_description="Permet de créer des utilisateurs dans WCA",
         display_order=0,
@@ -51,11 +52,33 @@ class ConnectorWCA(BaseResource):
         password = self.password
         url = f"{self.url_authentic}api/users/?update_or_create=email"
 
-        headers = {"Accept": "application/json"}
+        headers = {"Content-Type": "application/json"}
         auth = (username, password)
         data = request.body
 
         response = requests.post(url=url, headers=headers, auth=auth, data=data)
+        response.raise_for_status()
+
+        return response.json()
+
+
+    @endpoint(
+        name="roles",
+        perm="can_access",
+        methods=["get"],
+        description="Get roles",
+        long_description="Permet d'obtenir la liste des rôles dans WCA",
+        display_category="ROLES",
+    )
+    def get_roles(self, request):
+        username = self.username
+        password = self.password
+        url = f"{self.url_authentic}api/roles/?limit=100000"
+
+        auth = (username, password)
+
+        response = requests.get(url=url, auth=auth)
+
         response.raise_for_status()
 
         return response.json()
