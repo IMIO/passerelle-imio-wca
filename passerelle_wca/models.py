@@ -82,3 +82,32 @@ class ConnectorWCA(BaseResource):
         response.raise_for_status()
 
         return response.json()
+
+    @endpoint(
+        name="roles",
+        perm="can_access",
+        methods=["post"],
+        description="Add role to a user",
+        long_description="Permet d'ajouter un utilisateur dans un rôle",
+        display_category="ROLES",
+        pattern="^add_user",
+        example_pattern="add_user"
+    )
+    def add_role_user(self, request):
+        username = self.username
+        password = self.password
+
+        post_data = json.loads(request.body)
+        self.logger.info(post_data)
+        role_uuid = post_data["role_uuid"]
+        user_uuid = post_data["user_uuid"]
+
+        url = f"{self.url_authentic}api/roles/{role_uuid}/members/{user_uuid}/"
+        self.logger.info(url)
+        auth = (username, password)
+
+        response = requests.post(url=url, auth=auth)
+
+        response.raise_for_status()
+
+        return response.json()
