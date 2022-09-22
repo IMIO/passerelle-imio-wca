@@ -5,7 +5,7 @@ from setuptools import setup
 version = "0.0.0"
 
 setup(
-    name='passerelle-wca',
+    name='passerelle-imio-wca',
     version=version,
     author="iMio",
     author_email="support-ts@imio.be",
@@ -14,9 +14,9 @@ setup(
     classifiers=[
         "Environment :: Web Environment",
         "Programming Language :: Python",
-        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.9",
     ],
-    url="https://github.com/IMIO/passerelle-wca",
+    url="https://github.com/IMIO/passerelle-imio-wca",
     install_requires=[
         "django>=2.2",
     ],
