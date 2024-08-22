@@ -36,13 +36,48 @@ class ConnectorWCA(BaseResource):
         default="https://agents.wallonie-connect.be/"
     )
 
+
+    @endpoint(
+        name="user",
+        perm="can_access",
+        methods=["get"],
+        description="Get users",
+        long_description="Permet de chercher des utilisateurs dans WCA",
+        display_order=0,
+        display_category="USERS",
+        pattern="^get",
+        example_pattern="get",
+        parameters={
+            "email__iexact": {
+                "description": "email du user",
+                "example_value": "admints@imio.be",
+            },
+        },
+    )
+    def get_user(self, request, email__iexact=None):
+        username = self.username
+        password = self.password
+        url = f"{self.url_authentic}api/users/"
+
+        if email__iexact:
+            url += f"?email__iexact={email__iexact}"
+            # url += "&".join(f"{key}={value}" for key, value in {"email__iexact": email__iexact} if value)
+
+        headers = {"Content-Type": "application/json"}
+        auth = (username, password)
+
+        response = requests.get(url=url, headers=headers, auth=auth)
+        response.raise_for_status()
+
+        return response.json()
+
     @endpoint(
         name="user",
         perm="can_access",
         methods=["post"],
         description="Create user",
         long_description="Permet de créer des utilisateurs dans WCA",
-        display_order=0,
+        display_order=1,
         display_category="USERS",
         pattern="^create",
         example_pattern="create"
