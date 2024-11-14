@@ -167,7 +167,7 @@ class ConnectorWCA(BaseResource):
 
         return response.json()
 
-        @endpoint(
+    @endpoint(
         name="roles",
         perm="can_access",
         methods=["post"],
