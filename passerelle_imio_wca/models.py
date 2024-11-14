@@ -36,27 +36,6 @@ class ConnectorWCA(BaseResource):
         default="https://agents.wallonie-connect.be/"
     )
 
-    username_imio = models.CharField(
-        max_length=128,
-        blank=False,
-        verbose_name="Username iMio",
-        help_text="Username pour la connexion My iMio",
-    )
-
-    password_imio = models.CharField(
-        max_length=128,
-        blank=False,
-        verbose_name="Mot de passe iMio",
-        help_text="Mot de passe pour la connexion à My iMio",
-    )
-
-    url_authentic_imio = models.URLField(
-        verbose_name="URL authentic iMio",
-        help_text="URL de de base de connexion à authentic My iMio",
-        default="https://my.imio.be/"
-    )
-
-
     @endpoint(
         name="user",
         perm="can_access",
@@ -167,32 +146,4 @@ class ConnectorWCA(BaseResource):
 
         return response.json()
 
-    @endpoint(
-        name="roles",
-        perm="can_access",
-        methods=["post"],
-        description="Add role to a user",
-        long_description="Permet d'ajouter un utilisateur dans un rôle sur My iMio",
-        display_category="ROLES",
-        pattern="^add_user",
-        example_pattern="add_user"
-    )
-    def add_role_user_imio(self, request):
-        username = self.username_imio
-        password = self.password_imio
-
-        post_data = json.loads(request.body)
-        self.logger.info(post_data)
-        role_uuid = post_data["role_uuid"]
-        user_uuid = post_data["user_uuid"]
-
-        url = f"{self.url_authentic_imio}api/roles/{role_uuid}/members/{user_uuid}/"
-        self.logger.info(url)
-        auth = (username, password)
-
-        response = requests.post(url=url, auth=auth)
-
-        response.raise_for_status()
-
-        return response.json()
 
